@@ -1,0 +1,69 @@
+location:
+  city: "Saint John"
+  province: "NB"
+  radius_km: 75
+  jobbank_mid: "22380"   # Job Bank location ID for Saint John metro area
+
+sources:
+  jobbank_rss:
+    enabled: true
+    name: "Job Bank Canada"
+    feeds:
+      - name: trades
+        terms: [welder, electrician, plumber, pipefitter, millwright, carpenter, hvac, roofer, boilermaker, ironworker, apprentice, "red seal", gasfitter, steamfitter]
+      - name: labour_equipment
+        terms: [labourer, "construction worker", "equipment operator", "crane operator", excavator, forklift, "heavy equipment", "site worker", flagperson, dozer, grader]
+      - name: warehouse_transport
+        terms: [warehouse, driver, transport, "truck driver", "order picker", "shipping receiving", "production worker", "machine operator", manufacturing, dispatcher, logistics]
+      - name: maintenance_municipal
+        terms: ["maintenance technician", "building maintenance", "public works", grounds, custodian, facilities, "city worker", "transit operator", "snow removal", groundskeeper, janitor]
+      - name: power_utilities
+        terms: ["power line technician", lineman, "electrical technician", "power engineer", "line worker", "power plant", "transmission technician", "substation technician", "generation technician", "utility worker"]
+
+  nbjobs:
+    enabled: false   # JS-rendered, no static HTML or API available
+    name: "NBjobs.ca"
+    categories:
+      - "Trades, Transport and Equipment Operators"
+      - "Processing, Manufacturing and Utilities"
+      - "Natural Resources, Agriculture and Related Production"
+
+  gnb_ere:
+    enabled: true
+    name: "GNB ERE Portal"
+    url: "https://www.ere.gnb.ca/competition.aspx"
+
+  irving:
+    enabled: true
+    name: "Irving Oil / J.D. Irving"
+    limit_per_source: 200
+    workday_sources:
+      - name: "Irving Oil"
+        enabled: true
+        api_url: "https://irvingoil.wd3.myworkdayjobs.com/wday/cxs/irvingoil/IOL_Careers_Primary/jobs"
+        base_url: "https://irvingoil.wd3.myworkdayjobs.com"
+        path_prefix: "/en-US/IOL_Careers_Primary/job/"
+      - name: "J.D. Irving"
+        enabled: false   # Workday endpoint not confirmed — re-enable once correct URL is found
+        api_url: "https://jdirving.wd3.myworkdayjobs.com/wday/cxs/jdirving/JDI_Careers/jobs"
+        base_url: "https://jdirving.wd3.myworkdayjobs.com"
+        path_prefix: "/en-US/JDI_Careers/job/"
+
+  city_saintjohn:
+    enabled: false   # Blocked by Radware bot protection — City of SJ posts on Job Bank anyway
+    name: "City of Saint John"
+    url: "https://saintjohn.njoyn.com/CL2/xweb/xweb.asp?page=joblisting&CLID=51331"
+
+  nbpower:
+    enabled: false   # PeopleSoft is fully JavaScript-rendered — no static API available
+    name: "NB Power"
+    url: "https://www.careers.nbpower.com/psc/prod/EMPLOYEE/HRMS/c/HRS_HRAM_FL.HRS_CG_SEARCH_FL.GBL?FOCUS=Applicant&Page=HRS_APP_SCHJOB&Action=U&FOCUS=Applicant&SiteId=2"
+
+  email_ingestion:
+    enabled: true
+    name: "Email Alerts"
+    sources:
+      - name: indeed
+        sender: "alerts@indeed.com"
+      - name: linkedin
+        sender: "jobs-noreply@linkedin.com"

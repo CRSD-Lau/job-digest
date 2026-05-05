@@ -1,0 +1,134 @@
+# Job Market Digest — {{ week }}
+**Saint John, NB and Surrounding Area (75 km radius)**
+*Generated: {{ generated }}*
+
+---
+
+## Executive Summary
+
+- **{{ total_relevant }}** relevant postings tracked this week
+- **{{ total_new }} new** | **{{ total_removed }} removed** | **{{ total_reposted }} reposted**
+{% set prev_total = deltas | sum(attribute='last_week') %}
+{% if prev_total > 0 %}
+{% set curr_total = deltas | sum(attribute='this_week') %}
+{% set change = curr_total - prev_total %}
+- Week-over-week: {{ "+" if change >= 0 else "" }}{{ change }} postings vs {{ prev_week }}
+{% endif %}
+
+---
+
+## New Postings This Week ({{ total_new }} total)
+
+{% for cat, postings in grouped_new.items() %}
+### {{ category_labels.get(cat, cat) }} ({{ postings | length }})
+
+| Title | Company | Wage | Posted | Source |
+|-------|---------|------|--------|--------|
+{% for p in postings %}| [{{ p.title }}]({{ p.source_url or '#' }}) | {{ p.company or '—' }} | {{ p.wage_raw or '—' }} | {{ p.date_posted or '—' }} | {{ p.source }} |
+{% endfor %}
+
+{% else %}
+*No new relevant postings found this week.*
+{% endfor %}
+
+---
+
+## Removed Since Last Week ({{ total_removed }})
+
+{% if removed %}
+{% for p in removed %}
+- **{{ p.title }}** — {{ p.company or 'Unknown' }} *(listed since {{ p.week_found }})*
+{% endfor %}
+{% else %}
+*No postings removed this week.*
+{% endif %}
+
+---
+
+## Reposted Postings ({{ total_reposted }})
+
+{% if reposted %}
+{% for p in reposted %}
+- **{{ p.title }}** — {{ p.company or 'Unknown' }} *(reposted {{ p.repost_count }}x, first seen {{ p.week_found }})*
+{% endfor %}
+{% else %}
+*No reposted listings detected.*
+{% endif %}
+
+---
+
+## Week-over-Week by Category
+
+| Category | This Week | Last Week | Change |
+|----------|-----------|-----------|--------|
+{% for row in deltas %}| {{ row.category }} | {{ row.this_week }} | {{ row.last_week }} | {% if row.pct is not none %}{{ "+" if row.delta >= 0 else "" }}{{ row.delta }} ({{ "+" if row.pct >= 0 else "" }}{{ row.pct }}%){% else %}{{ "+" if row.delta >= 0 else "" }}{{ row.delta }}{% endif %} |
+{% endfor %}
+
+---
+
+## Top Hiring Companies This Week
+
+{% if top_companies %}
+{% for c in top_companies %}
+{{ loop.index }}. **{{ c.company }}** — {{ c.cnt }} posting{{ 's' if c.cnt > 1 else '' }}
+{% endfor %}
+{% else %}
+*No company data available.*
+{% endif %}
+
+---
+
+## Most Common Job Titles
+
+{% if top_titles %}
+{% for t in top_titles %}
+{{ loop.index }}. {{ t.title }} ({{ t.cnt }})
+{% endfor %}
+{% else %}
+*No title data available.*
+{% endif %}
+
+---
+
+## Wage Trends (where reported)
+
+{% if wage_data %}
+| Category | Avg Min Wage | Postings with Wage |
+|----------|-------------|-------------------|
+{% for w in wage_data %}| {{ category_labels.get(w.normalized_category, w.normalized_category) }} | ${{ "%.2f"|format(w.avg_min) }}/hr est. | {{ w.cnt }} |
+{% endfor %}
+{% else %}
+*No wage data available this week.*
+{% endif %}
+
+---
+
+## Excluded This Week
+
+{% if excluded %}
+| Reason | Count |
+|--------|-------|
+{% for e in excluded %}| {{ e.exclusion_reason or 'unclassified' }} | {{ e.cnt }} |
+{% endfor %}
+{% else %}
+*No exclusions recorded.*
+{% endif %}
+
+---
+
+## Flagged for Manual Review ({{ flagged | length }})
+
+{% if flagged %}
+*These postings were not clearly classifiable — review and re-classify if needed:*
+
+{% for p in flagged %}
+- **{{ p.title }}** — {{ p.company or '?' }} @ {{ p.location or '?' }} | [link]({{ p.source_url or '#' }})
+{% endfor %}
+{% else %}
+*No postings flagged for review.*
+{% endif %}
+
+---
+
+*Sources checked: Job Bank Canada (RSS), NBjobs.ca, GNB ERE Portal, Email Alerts*
+*Database tracks all postings since first run. Remove `data/jobs.db` to reset.*

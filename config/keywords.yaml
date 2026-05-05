@@ -1,0 +1,254 @@
+include:
+  trades:
+    - welder
+    - welding
+    - electrician
+    - electrical
+    - plumber
+    - plumbing
+    - pipefitter
+    - millwright
+    - carpenter
+    - carpentry
+    - hvac
+    - refrigeration
+    - roofer
+    - roofing
+    - boilermaker
+    - ironworker
+    - gasfitter
+    - steamfitter
+    - sheet metal
+    - glazier
+    - insulator
+    - "red seal"
+    - journeyman
+    - journeyperson
+    - "trade certificate"
+    - "certificate of qualification"
+    - tiler
+    - mason
+
+  labour:
+    - labourer
+    - "general labour"
+    - "labour crew"
+    - "construction worker"
+    - "site worker"
+    - flagperson
+    - flagger
+    - concrete
+    - formwork
+    - demolition
+    - "landscape labour"
+    - "grounds crew"
+    - "construction labourer"
+
+  equipment:
+    - "equipment operator"
+    - "heavy equipment"
+    - "crane operator"
+    - excavator
+    - loader
+    - dozer
+    - grader
+    - paving
+    - drilling
+    - "boom truck"
+    - "aerial lift"
+    - "skid steer"
+    - "forklift operator"
+    - forklift
+    - "reach truck"
+
+  warehousing:
+    - warehouse
+    - "order picker"
+    - "shipping and receiving"
+    - "shipping receiving"
+    - "loading dock"
+    - inventory
+    - stockroom
+    - packer
+    - sorter
+    - "material handler"
+    - "distribution centre"
+    - "distribution center"
+
+  maintenance:
+    - "maintenance technician"
+    - "maintenance worker"
+    - "maintenance mechanic"
+    - "building maintenance"
+    - facilities
+    - groundskeeper
+    - custodian
+    - "property maintenance"
+    - "preventive maintenance"
+    - "preventative maintenance"
+    - janitor
+    - caretaker
+
+  transportation:
+    - driver
+    - "truck driver"
+    - "transport driver"
+    - "cdl"
+    - "class 1"
+    - "class 3"
+    - "az license"
+    - "dz license"
+    - courier
+    - dispatcher
+    - "fleet coordinator"
+    - "logistics coordinator"
+    - delivery
+
+  manufacturing:
+    - "production worker"
+    - "machine operator"
+    - "press operator"
+    - "line worker"
+    - assembly
+    - fabricator
+    - "quality control"
+    - packaging
+    - cnc
+    - machinist
+    - toolmaker
+    - "production line"
+    - "manufacturing worker"
+
+  construction:
+    - construction
+    - "site superintendent"
+    - estimator
+    - "project coordinator"
+    - "safety officer"
+    - "safety coordinator"
+    - "site supervisor"
+    - foreman
+    - foreperson
+
+  municipal:
+    - "public works"
+    - "city worker"
+    - "parks department"
+    - "water treatment"
+    - wastewater
+    - bylaw
+    - "transit operator"
+    - "snow removal"
+    - "road maintenance"
+    - "city of saint john"
+
+  apprenticeship:
+    - apprentice
+    - "pre-apprenticeship"
+    - "training program"
+    - "registered apprentice"
+    - "apprenticeship program"
+
+exclude:
+  retail:
+    - cashier
+    - "sales associate"
+    - "retail associate"
+    - "store associate"
+    - "key holder"
+    - "visual merchandiser"
+    - "floor associate"
+    - "front end associate"
+    - "loss prevention"
+    - merchandise
+    - "retail manager"
+    - "assistant manager" # only if no trade context
+
+  food_service:
+    - server
+    - bartender
+    - barista
+    - "line cook"
+    - "prep cook"
+    - "front of house"
+    - " foh "
+    - host
+    - hostess
+    - "food counter"
+    - "drive-through"
+    - "crew member"
+    - "kitchen helper"
+    - "restaurant supervisor" # restaurant-specific
+    - "food service supervisor"
+
+  customer_service:
+    - "customer service representative"
+    - " csr "
+    - "call centre"
+    - "call center"
+    - "contact centre"
+    - "contact center"
+    - "help desk"
+    - "client service"
+    - "customer support"
+    - "inbound calls"
+    - "phone support"
+    - "service desk"
+
+  sales:
+    - "sales representative"
+    - "inside sales"
+    - "outside sales"
+    - "door-to-door"
+    - "commission only"
+    - "account executive"
+    - "insurance sales"
+    - "financial advisor"
+    - "network marketing"
+    - "mlm"
+    - "be your own boss"
+    - "unlimited earning"
+    - "distributor"
+
+  professional_office:
+    - "registered nurse"
+    - "licensed practical nurse"
+    - " l.p.n."
+    - " r.n."
+    - physiotherapist
+    - chiropractor
+    - psychologist
+    - "social worker"
+    - lawyer
+    - paralegal
+    - accountant
+    - auditor
+    - "human resources coordinator"
+    - "project manager"
+    - "business analyst"
+    - "data analyst"
+    - "software developer"
+    - "web developer"
+    - "digital transformation"
+    - "product owner"
+    - translator
+    - "marketing coordinator"
+    - "communications coordinator"
+    - "event coordinator"
+    - registrar
+    - "dental hygienist"
+    - dentist
+    - "clinical psychologist"
+    - "correctional officer"
+    - "court stenographer"
+    - librarian
+
+scam_flags:
+  - "be your own boss"
+  - "unlimited earning potential"
+  - "work from home and earn"
+  - "no experience required"   # only a flag, not auto-exclude
+  - "entrepreneur opportunity"
+  - "network marketing"
+  - "mlm"
+  - "pyramid"

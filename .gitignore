@@ -1,0 +1,18 @@
+.env
+.env.*
+.venv/
+venv/
+env/
+data/*.db
+data/*.sqlite
+data/*.sqlite-*
+logs/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+reports/*.md
+reports/*.html
+.pytest_cache/
+*.log
+Superpowers Skills/

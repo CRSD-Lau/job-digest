@@ -4,6 +4,10 @@ Private Saint John job-posting digest automation.
 
 The project collects jobs from configured sources, keeps local history in SQLite, and can generate/send a weekly digest email.
 
+## Preview
+
+![Job Digest weekly report preview](docs/assets/readme-screenshot.png)
+
 ## Setup
 
 ```powershell

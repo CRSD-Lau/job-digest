@@ -182,6 +182,7 @@ def _extract_card_metadata(text: str, title: str) -> tuple[str | None, str | Non
 def fetch(config: dict, gmail_user: str, gmail_password: str) -> list[dict]:
     folder = "JobAlerts"
     postings = []
+    mail = None
 
     try:
         mail = imaplib.IMAP4_SSL(IMAP_HOST, IMAP_PORT)
@@ -213,9 +214,13 @@ def fetch(config: dict, gmail_user: str, gmail_password: str) -> list[dict]:
             # Mark as read
             mail.store(mid, "+FLAGS", "\\Seen")
 
-        mail.logout()
-
     except Exception as e:
         print(f"  [email] IMAP error: {e}")
+    finally:
+        if mail is not None:
+            try:
+                mail.logout()
+            except Exception:
+                pass
 
     return postings

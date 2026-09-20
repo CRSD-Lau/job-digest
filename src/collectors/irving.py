@@ -105,7 +105,8 @@ def _fetch_workday(source: dict, limit: int = 100) -> list[dict]:
                     slug = bulletin[0] if bulletin else title.replace(" ", "-")
                     job_url = source["base_url"] + source["path_prefix"] + slug
 
-                posting_id_raw = job.get("bulletFields", [None])[0] or job_url
+                bullet_fields = job.get("bulletFields") or [None]
+                posting_id_raw = bullet_fields[0] or job_url
                 posting_id = SOURCE + "-" + hashlib.md5(posting_id_raw.encode()).hexdigest()[:10]
 
                 # Location string (may be str or list)

@@ -145,8 +145,16 @@ def upsert_posting(db_path: str, posting: dict) -> str:
             else:
                 new_status = "active"
             conn.execute(
-                "UPDATE postings SET week_last_seen=?, status=? WHERE id=?",
-                (week, new_status, existing["id"])
+                """UPDATE postings SET week_last_seen=?, status=?,
+                   normalized_category=?, is_relevant=?,
+                   exclusion_reason=?, classification_confidence=?
+                   WHERE id=?""",
+                (week, new_status,
+                 posting.get("normalized_category"),
+                 1 if posting.get("is_relevant", True) else 0,
+                 posting.get("exclusion_reason"),
+                 posting.get("classification_confidence"),
+                 existing["id"])
             )
             return "updated"
 
@@ -183,15 +191,21 @@ def upsert_posting(db_path: str, posting: dict) -> str:
         return "new"
 
 
-def mark_removed_postings(db_path: str) -> int:
-    """Mark postings not seen this week as removed. Returns count."""
+def mark_removed_postings(db_path: str, sources: list) -> int:
+    """Mark postings not seen this week as removed, but only for sources
+    that completed successfully this run — a down source must not mass-mark
+    its postings as removed. Returns count."""
+    if not sources:
+        return 0
     current_week = get_week_label()
+    placeholders = ",".join("?" for _ in sources)
     with get_connection(db_path) as conn:
-        cur = conn.execute("""
+        cur = conn.execute(f"""
             UPDATE postings SET status='removed'
             WHERE status IN ('new', 'active', 'reposted')
             AND week_last_seen != ?
-        """, (current_week,))
+            AND source IN ({placeholders})
+        """, (current_week, *sources))
         return cur.rowcount
 
 

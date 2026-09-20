@@ -101,7 +101,7 @@ def process_postings(raw_postings: list[dict], dry_run: bool) -> dict:
     return stats
 
 
-def send_digest_email(report_path: str, week: str, gmail_user: str, gmail_pass: str, recipients: list[str] | None = None) -> None:
+def send_digest_email(report_path: str, week: str, gmail_user: str, gmail_pass: str, recipients: list[str] | None = None, source_count: int = 0) -> None:
     import markdown as md_lib
     import re as _re
 
@@ -258,7 +258,7 @@ def send_digest_email(report_path: str, week: str, gmail_user: str, gmail_pass: 
             <td width="25%" valign="top" style="padding-left:5px;">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr><td style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:8px;padding:12px 8px;text-align:center;">
-                  <div class="stat-num" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:26px;font-weight:800;color:{C_WHITE};line-height:1;">4</div>
+                  <div class="stat-num" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:26px;font-weight:800;color:{C_WHITE};line-height:1;">{source_count}</div>
                   <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:5px;">Sources</div>
                 </td></tr>
               </table>
@@ -537,9 +537,12 @@ def main():
     stats = process_postings(all_raw, dry_run)
 
     # --- Mark removed postings ---
+    # Only for sources that ran successfully this time — a failed source
+    # must not mass-mark its postings as removed.
     removed_count = 0
     if not dry_run:
-        removed_count = db.mark_removed_postings(DB_PATH)
+        successful_sources = [name for name, _, err, _ in source_results if err is None]
+        removed_count = db.mark_removed_postings(DB_PATH, successful_sources)
 
     # --- Print summary table ---
     table = Table(title="Collection Summary")
@@ -584,7 +587,11 @@ def main():
             if recipients:
                 console.print(f"  CC: {', '.join(recipients)}")
             try:
-                send_digest_email(report_path, digest_data["week"], gmail_user, gmail_pass, recipients)
+                enabled_sources = sum(
+                    1 for s in sources_cfg.values()
+                    if isinstance(s, dict) and s.get("enabled")
+                )
+                send_digest_email(report_path, digest_data["week"], gmail_user, gmail_pass, recipients, enabled_sources)
                 console.print("[bold green]Email sent.")
             except Exception as e:
                 console.print(f"[red]Email failed: {e}")

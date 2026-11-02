@@ -2,6 +2,8 @@ import sqlite3
 import json
 from pathlib import Path
 from datetime import date, datetime
+from contextlib import contextmanager
+from collections.abc import Iterator
 
 
 def get_week_label(d: date | None = None) -> str:
@@ -10,11 +12,16 @@ def get_week_label(d: date | None = None) -> str:
     return f"{iso.year}-W{iso.week:02d}"
 
 
-def get_connection(db_path: str) -> sqlite3.Connection:
+@contextmanager
+def get_connection(db_path: str) -> Iterator[sqlite3.Connection]:
     conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
-    return conn
+    try:
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA journal_mode=WAL")
+        with conn:
+            yield conn
+    finally:
+        conn.close()
 
 
 def init_db(db_path: str) -> None:

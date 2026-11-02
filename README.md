@@ -10,6 +10,8 @@ The project collects configured job sources, classifies relevant postings, keeps
 
 ## Setup
 
+Use Python 3.11 or newer.
+
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
